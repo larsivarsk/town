@@ -1,52 +1,12 @@
 
 import requests
-
-api_key = "67GDJTT1ZZGTTTN4"
-ticker = "MSFT"
-keyword = "MSFT"
-
-
-# earnings = f'https://www.alphavantage.co/query?function=EARNINGS&symbol={ticker}&apikey={api_key}'
-# request_earnings = requests.get(earnings)
-# earnings_data = request_earnings.json()
-# print(earnings_data)
-# print("\nSKILLE\n")
-
-# balance_sheet = f'https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol={ticker}&apikey={api_key}'
-# request_balance_sheet = requests.get(balance_sheet)
-# balance_sheet_data = request_balance_sheet.json()
-# print(balance_sheet_data)
-# print("\nSKILLE\n")
-
-# income = f'https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol={ticker}&apikey={api_key}'
-# request_income = requests.get(income)
-# income_data = request_income.json()
-# print(income_data)
-# print("\nSKILLE\n")
-
-# cash_flow = f'https://www.alphavantage.co/query?function=CASH_FLOW&symbol={ticker}&apikey={api_key}'
-# request_cash_flow = requests.get(cash_flow)
-# cash_flow_data = request_cash_flow.json()
-# print(cash_flow_data)
-# print("\nSKILLE\n")
-
-# ticker_search = f'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={keyword}&apikey={api_key}'
-# request_search = requests.get(ticker_search)
-# search_data = request_search.json()
-# print(search_data)  
-# print("\nSKILLE\n") 
-
-
-# overview = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={api_key}'
-# request_overview = requests.get(overview)
-# overview_data = request_overview.json()
-# print(overview_data)
+import urls as u
 
 
 #ROIC DATA
 #----------------------------------------------
 
-#Returns list of the last 10 years of ROIC data from 
+#Returns list of the last 5 years of ROIC data from 
 #oldest to newest
 def ROIC():
     
@@ -55,20 +15,25 @@ def ROIC():
     income_list = []
     interest_expense_list = []
     tax_rate_list = []
-    nopat_list = []
     equity_debt_list = []
     roic_list = []  
     
-    for data in income_data['annualReports']:
+    for data in u.income_statement()['annualReports']:
         income_list.append(float(data['netIncomeFromContinuingOperations']))
-        interest_expense_list.append(float(data['interestExpense']))
+        interest_expense = data['interestExpense']
+        if interest_expense != 'None':
+            interest_expense_list.append(float(interest_expense))
+        else:
+            interest_expense_list.append(0)
+            
+        
         tax_rate = float(data['incomeTaxExpense'])/float(data['incomeBeforeTax'])
         tax_rate_list.append(tax_rate)
-        
-    for data in balance_sheet_data['annualReports']:
+            
+    for data in u.balance_sheet()['annualReports']:
         equity_debt = float(data['totalShareholderEquity']) + float(data['totalLiabilities'])
         equity_debt_list.append(equity_debt)
-        
+                
     for i in range(0, min(len(income_list), len(equity_debt_list))):
         nopat = income_list[i] + interest_expense_list[i]*(1-tax_rate_list[i])
         roic = nopat/equity_debt_list[i]
@@ -82,14 +47,14 @@ def ROIC():
 #==============================================================================
 
 
-#EQUTY DATA 
+#EQUiTY DATA 
 #----------------------------------------------
 
 #List of the last 5 years of equity data from
 #oldest to newest
 def equity():
     equity_list = []
-    for data in balance_sheet_data['annualReports']:
+    for data in u.balance_sheet()['annualReports']:
         equity_list.append(float(data['totalShareholderEquity']))
         
     #FROM OLDEST TO NEWEST
@@ -137,7 +102,7 @@ def equity_growth_3():
 def EPS():
     eps_list = []
 
-    for eps in earnings_data['annualEarnings']:
+    for eps in u.earnings()['annualEarnings']:
         eps_list.append(float(eps['reportedEPS']))
         
     eps_list_10 = eps_list[:10]
@@ -164,11 +129,6 @@ def EPS_growth_3():
     data = EPS()
     return round(((data[4]/data[2])**0.333)-1,3)
 
-#1 year growth rate of EPS (abundant)
-# def EPS_growth_1():
-#     data = EPS()
-#     return round(((data[1]/data[0])**1)-1,3)
-
 #Returns a list of EPS growth year over year
 #for the last 10 years from oldest to newest
 def EPS_growth():
@@ -190,13 +150,12 @@ def EPS_growth():
 #from oldest to newest
 def gross_profit():
     gross_profit_list = []
-    for data in income_data['annualReports']:
+    for data in u.income_statement()['annualReports']:
         gross_profit_list.append(float(data['grossProfit']))
     
     #FROM OLDEST TO NEWEST
     gross_profit_list.reverse()
     return gross_profit_list
-
 
 #Returns a list over gross profit growth year over year 
 #for the last 5 years from oldest to newest
@@ -238,7 +197,7 @@ def GP_growth_3():
 def free_cash_flow():
     free_cash_flow_list = []
     
-    for data in cash_flow_data['annualReports']:
+    for data in u.cash_flow()['annualReports']:
         operating_cash_flow = float(data['operatingCashflow'])
         capital_expenditure = float(data['capitalExpenditures'])
         free_cash_flow_list.append(operating_cash_flow - capital_expenditure)

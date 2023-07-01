@@ -1,33 +1,8 @@
-import requests
-
-api_key = "67GDJTT1ZZGTTTN4"
-ticker = "MSFT"
-
-
-# MACDEXT = f"https://www.alphavantage.co/query?function=MACDEXT&symbol={ticker}&interval=daily&series_type=open&apikey={api_key}"
-# request_MACDEXT = requests.get(MACDEXT)
-# MACDEXT_data = request_MACDEXT.json()
-# print(MACDEXT_data)
-
-# STOCH = f"https://www.alphavantage.co/query?function=STOCH&symbol={ticker}&interval=daily&apikey={api_key}"
-# request_STOCH = requests.get(STOCH)
-# STOCH_data = request_STOCH.json()
-#print(STOCH_data)
-
-sma = f"https://www.alphavantage.co/query?function=SMA&symbol={ticker}&interval=daily&time_period=10&series_type=open&apikey={api_key}"
-request_sma = requests.get(sma)
-sma_data = request_sma.json()
-# print(sma_data)
-# print('\nSKILLE\n')
-
-daily_adjusted = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol={ticker}&apikey={api_key}"
-request_daily_adjusted = requests.get(daily_adjusted)
-daily_adjusted_data = request_daily_adjusted.json()
-# print(daily_adjusted_data)
+import urls as u
 
 #MACDEXT
-#MACD - the gauge of the water hose
-#(requires Premium)
+#MACD - the gauge of the water hose (requires Premium)
+#When hist > 0 - bullish
 #----------------------------------------------
 
 #Fast EMA - 12 day EMA
@@ -35,7 +10,7 @@ daily_adjusted_data = request_daily_adjusted.json()
 #Signal - 9 day EMA of MACD
 def MACDEXT():
     print('MACDEXT')
-    data = MACDEXT_data['Technical Analysis: MACDEXT']
+    data = u.MACDEXT()['Technical Analysis: MACDEXT']
     
     hist = []
     for d in data:
@@ -58,7 +33,7 @@ def MACDEXT():
 #SlowD - 3 day SMA of SlowK
 def STOCH():
     print('STOCH')
-    data = STOCH_data['Technical Analysis: STOCH']
+    data = u.STOCH()['Technical Analysis: STOCH']
     
     slowk = []
     slowd = []
@@ -77,14 +52,16 @@ def STOCH():
 
 #==============================================================================
 
+
 #MOVING AVERAGE
-#Using the simple moving average
+#Using the simple moving average (SMA)
+#When price > SMA - bullish
 #----------------------------------------------
 
 def moving_average():
     print('MOVING AVERAGE')
-    ma_data = sma_data['Technical Analysis: SMA']
-    da_data = daily_adjusted_data['Time Series (Daily)']
+    ma_data = u.SMA()['Technical Analysis: SMA']
+    da_data = u.daily_adjusted()['Time Series (Daily)']
     
     ma = []
     da = []
@@ -93,6 +70,7 @@ def moving_average():
         ma.append(float(ma_data[d]['SMA']))
         
     #FROM OLDEST TO NEWEST, last 100 records
+    #of moving average
     ma = ma[:100]
     ma.reverse()
     
@@ -100,11 +78,13 @@ def moving_average():
         da.append(float(da_data[d]['5. adjusted close']))
     
     #FROM OLDEST TO NEWEST, last 100 records
+    #of daily adjusted close
     da = da[:100]
     da.reverse()
     
     return ma, da
 
+print(moving_average())
 #==============================================================================    
     
         
