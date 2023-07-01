@@ -6,41 +6,41 @@ ticker = "MSFT"
 keyword = "MSFT"
 
 
-earnings = f'https://www.alphavantage.co/query?function=EARNINGS&symbol={ticker}&apikey={api_key}'
+# earnings = f'https://www.alphavantage.co/query?function=EARNINGS&symbol={ticker}&apikey={api_key}'
 # request_earnings = requests.get(earnings)
 # earnings_data = request_earnings.json()
 # print(earnings_data)
 # print("\nSKILLE\n")
 
-balance_sheet = f'https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol={ticker}&apikey={api_key}'
-request_balance_sheet = requests.get(balance_sheet)
-balance_sheet_data = request_balance_sheet.json()
-print(balance_sheet_data)
-print("\nSKILLE\n")
+# balance_sheet = f'https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol={ticker}&apikey={api_key}'
+# request_balance_sheet = requests.get(balance_sheet)
+# balance_sheet_data = request_balance_sheet.json()
+# print(balance_sheet_data)
+# print("\nSKILLE\n")
 
-income = f'https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol={ticker}&apikey={api_key}'
-request_income = requests.get(income)
-income_data = request_income.json()
-print(income_data)
-print("\nSKILLE\n")
+# income = f'https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol={ticker}&apikey={api_key}'
+# request_income = requests.get(income)
+# income_data = request_income.json()
+# print(income_data)
+# print("\nSKILLE\n")
 
-cash_flow = f'https://www.alphavantage.co/query?function=CASH_FLOW&symbol={ticker}&apikey={api_key}'
-request_cash_flow = requests.get(cash_flow)
-cash_flow_data = request_cash_flow.json()
-print(cash_flow_data)
-print("\nSKILLE\n")
+# cash_flow = f'https://www.alphavantage.co/query?function=CASH_FLOW&symbol={ticker}&apikey={api_key}'
+# request_cash_flow = requests.get(cash_flow)
+# cash_flow_data = request_cash_flow.json()
+# print(cash_flow_data)
+# print("\nSKILLE\n")
 
-#ticker_search = f'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={keyword}&apikey={api_key}'
+# ticker_search = f'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={keyword}&apikey={api_key}'
 # request_search = requests.get(ticker_search)
 # search_data = request_search.json()
 # print(search_data)  
 # print("\nSKILLE\n") 
 
 
-overview = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={api_key}'
-#request_overview = requests.get(overview)
-#overview_data = request_overview.json()
-#print(overview_data)
+# overview = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={ticker}&apikey={api_key}'
+# request_overview = requests.get(overview)
+# overview_data = request_overview.json()
+# print(overview_data)
 
 
 #ROIC DATA
