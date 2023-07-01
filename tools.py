@@ -1,8 +1,4 @@
 import requests
-import datetime
-
-timedelta = datetime.timedelta(days=181)
-today = datetime.date.today()
 
 api_key = "67GDJTT1ZZGTTTN4"
 ticker = "MSFT"
@@ -42,7 +38,6 @@ def MACDEXT():
     data = MACDEXT_data['Technical Analysis: MACDEXT']
     
     hist = []
-    date = ''
     for d in data:
         hist.append(float(data[d]['MACD_Hist']))
     
@@ -80,6 +75,8 @@ def STOCH():
     
     return slowk, slowd
 
+#==============================================================================
+
 #MOVING AVERAGE
 #Using the simple moving average
 #----------------------------------------------
@@ -108,7 +105,6 @@ def moving_average():
     
     return ma, da
 
-print(moving_average())
-    
+#==============================================================================    
     
         

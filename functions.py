@@ -46,7 +46,7 @@ keyword = "MSFT"
 #ROIC DATA
 #----------------------------------------------
 
-#List of the last 10 years of ROIC data from 
+#Returns list of the last 10 years of ROIC data from 
 #oldest to newest
 def ROIC():
     
@@ -169,8 +169,8 @@ def EPS_growth_3():
 #     data = EPS()
 #     return round(((data[1]/data[0])**1)-1,3)
 
-#Returns a list over EPS growth year over year for the
-#last 10 years from oldest to newest
+#Returns a list of EPS growth year over year
+#for the last 10 years from oldest to newest
 def EPS_growth():
     print("EPS growth")
     data = EPS()
@@ -198,8 +198,8 @@ def gross_profit():
     return gross_profit_list
 
 
-#Returns a list over gross profit growth 
-#year over year
+#Returns a list over gross profit growth year over year 
+#for the last 5 years from oldest to newest
 def GP_growth():
     print("GP growth")
     gross_profit_list = gross_profit()
@@ -247,6 +247,8 @@ def free_cash_flow():
     free_cash_flow_list.reverse()
     return free_cash_flow_list
 
+#Returns a list of cash flow growth year over year
+#for the last 5 years from oldest to newest
 def cash_flow_growth():
     print("Cash flow growth")
     cash_flow = free_cash_flow()
