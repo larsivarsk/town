@@ -2,6 +2,9 @@
 import requests
 import urls as u
 
+income_statement = u.income_statement()['annualReports']
+balance_sheet = u.balance_sheet()['annualReports']
+
 
 #ROIC DATA
 #----------------------------------------------
@@ -18,7 +21,7 @@ def ROIC():
     equity_debt_list = []
     roic_list = []  
     
-    for data in u.income_statement()['annualReports']:
+    for data in income_statement:
         income_list.append(float(data['netIncomeFromContinuingOperations']))
         interest_expense = data['interestExpense']
         if interest_expense != 'None':
@@ -30,7 +33,7 @@ def ROIC():
         tax_rate = float(data['incomeTaxExpense'])/float(data['incomeBeforeTax'])
         tax_rate_list.append(tax_rate)
             
-    for data in u.balance_sheet()['annualReports']:
+    for data in balance_sheet:
         equity_debt = float(data['totalShareholderEquity']) + float(data['totalLiabilities'])
         equity_debt_list.append(equity_debt)
                 
@@ -43,18 +46,17 @@ def ROIC():
     roic_list.reverse()
     
     return roic_list
-        
 #==============================================================================
 
 
-#EQUiTY DATA 
+#EQUITY DATA 
 #----------------------------------------------
 
 #List of the last 5 years of equity data from
 #oldest to newest
 def equity():
     equity_list = []
-    for data in u.balance_sheet()['annualReports']:
+    for data in balance_sheet:
         equity_list.append(float(data['totalShareholderEquity']))
         
     #FROM OLDEST TO NEWEST
@@ -90,7 +92,6 @@ def equity_growth_3():
     if len(data) < 3:
         return "-"
     return round(((data[4]/data[2])**0.333)-1,3)
-
 #==============================================================================
 
 
@@ -150,7 +151,7 @@ def EPS_growth():
 #from oldest to newest
 def gross_profit():
     gross_profit_list = []
-    for data in u.income_statement()['annualReports']:
+    for data in income_statement:
         gross_profit_list.append(float(data['grossProfit']))
     
     #FROM OLDEST TO NEWEST
