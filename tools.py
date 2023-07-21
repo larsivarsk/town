@@ -1,4 +1,5 @@
 import urls as u
+import apistckr as a
 
 #MACDEXT
 #MACD - the gauge of the water hose (requires Premium)
@@ -10,7 +11,7 @@ import urls as u
 #Signal - 9 day EMA of MACD
 def MACDEXT():
     print('MACDEXT')
-    data = u.MACDEXT()['Technical Analysis: MACDEXT']
+    data = u.MACDEXT(a.ticker, a.api_key)['Technical Analysis: MACDEXT']
     
     hist = []
     for d in data:
@@ -33,7 +34,7 @@ def MACDEXT():
 #SlowD - 3 day SMA of SlowK
 def STOCH():
     print('STOCH')
-    data = u.STOCH()['Technical Analysis: STOCH']
+    data = u.STOCH(a.ticker, a.api_key)['Technical Analysis: STOCH']
     
     slowk = []
     slowd = []
@@ -60,8 +61,8 @@ def STOCH():
 
 def moving_average():
     print('MOVING AVERAGE')
-    ma_data = u.SMA()['Technical Analysis: SMA']
-    da_data = u.daily_adjusted()['Time Series (Daily)']
+    ma_data = u.SMA(a.ticker, a.api_key)['Technical Analysis: SMA']
+    da_data = u.daily_adjusted(a.ticker, a.api_key)['Time Series (Daily)']
     
     ma = []
     da = []
