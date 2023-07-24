@@ -331,7 +331,7 @@ def choose_pe(balance_sheet):
 def intrinsic_value(earnings, balance_sheet):
     future_eps = trailing_EPS(earnings)*equity_growth_average(balance_sheet)**10
     pe = choose_pe(balance_sheet)
-    return round(future_eps*pe, 3)
+    return round(future_eps*pe/4, 3)
 
 def MOS(earnings, balance_sheet):
     return round(intrinsic_value(earnings, balance_sheet)/2, 3)
