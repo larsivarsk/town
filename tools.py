@@ -10,7 +10,6 @@ import apistckr as a
 #Slow EMA - 26 day EMA
 #Signal - 9 day EMA of MACD
 def MACDEXT():
-    print('MACDEXT')
     data = u.MACDEXT(a.ticker, a.api_key)['Technical Analysis: MACDEXT']
     
     hist = []
@@ -33,7 +32,6 @@ def MACDEXT():
 
 #SlowD - 3 day SMA of SlowK
 def STOCH():
-    print('STOCH')
     data = u.STOCH(a.ticker, a.api_key)['Technical Analysis: STOCH']
     
     slowk = []
@@ -60,9 +58,8 @@ def STOCH():
 #----------------------------------------------
 
 def moving_average():
-    print('MOVING AVERAGE')
     ma_data = u.SMA(a.ticker, a.api_key)['Technical Analysis: SMA']
-    da_data = u.daily_adjusted(a.ticker, a.api_key)['Time Series (Daily)']
+    daily_data = u.daily(a.ticker, a.api_key)['Time Series (Daily)']
     
     ma = []
     da = []
@@ -75,14 +72,14 @@ def moving_average():
     ma = ma[:100]
     ma.reverse()
     
-    for d in da_data:
-        da.append(float(da_data[d]['5. adjusted close']))
+    for d in daily_data:
+        da.append(float(daily_data[d]['4. close']))
     
     #FROM OLDEST TO NEWEST, last 100 records
     #of daily adjusted close
     da = da[:100]
     da.reverse()
-    
+        
     return ma, da
 
 #==============================================================================    
