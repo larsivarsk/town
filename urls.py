@@ -98,10 +98,18 @@ def daily(ticker, api_key):
 
 # print(daily('AAPL', '67GDJTT1ZZGTTTN4'))
 
+def monthly_adjusted(ticker, api_key):
+    monthly_adjusted = f"https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol={ticker}&apikey={api_key}&outputsize=full"
+    request_monthly_adjusted = requests.get(monthly_adjusted)
+    monthly_adjusted_data = request_monthly_adjusted.json()
+    return monthly_adjusted_data
+
+# print(monthly_adjusted('AAPL', '67GDJTT1ZZGTTTN4'))
+
 def monthly(ticker, api_key):
     monthly = f"https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol={ticker}&apikey={api_key}&outputsize=full"
     request_monthly = requests.get(monthly)
     monthly_data = request_monthly.json()
     return monthly_data
 
-print(monthly('AAPL', '67GDJTT1ZZGTTTN4'))
+# print(monthly('AAPL', '67GDJTT1ZZGTTTN4'))
