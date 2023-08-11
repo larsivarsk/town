@@ -9,8 +9,7 @@ import apistckr as a
 #Fast EMA - 12 day EMA
 #Slow EMA - 26 day EMA
 #Signal - 9 day EMA of MACD
-def MACDEXT():
-    data = u.MACDEXT(a.ticker, a.api_key)['Technical Analysis: MACDEXT']
+def MACDEXT(data):
     
     hist = []
     for d in data:
@@ -31,8 +30,7 @@ def MACDEXT():
 #----------------------------------------------
 
 #SlowD - 3 day SMA of SlowK
-def STOCH():
-    data = u.STOCH(a.ticker, a.api_key)['Technical Analysis: STOCH']
+def STOCH(data):
     
     slowk = []
     slowd = []
@@ -57,9 +55,7 @@ def STOCH():
 #When price > SMA - bullish
 #----------------------------------------------
 
-def moving_average():
-    ma_data = u.SMA(a.ticker, a.api_key)['Technical Analysis: SMA']
-    daily_data = u.daily(a.ticker, a.api_key)['Time Series (Daily)']
+def moving_average(ma_data, daily_data):
     
     ma = []
     da = []
@@ -80,7 +76,7 @@ def moving_average():
     da = da[:100]
     da.reverse()
         
-    return ma, da
+    return ma, da, da[-1]
 
 #==============================================================================    
 

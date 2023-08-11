@@ -196,10 +196,12 @@ def free_cash_flow(fcf):
     free_cash_flow_list = []
     
     for data in fcf:
-        if data['operatingCashflow'] == 'None' and data['capitalExpenditures'] == 'None':
+        if data['operatingCashflow'] != 'None' and data['capitalExpenditures'] != 'None':
             operating_cash_flow = float(data['operatingCashflow'])
             capital_expenditure = float(data['capitalExpenditures'])
             free_cash_flow_list.append(operating_cash_flow - capital_expenditure)
+        elif data['capitalExpenditures'] == 'None':
+            free_cash_flow_list.append(float(data['operatingCashflow']))
         else:
             free_cash_flow_list.append(1)
     
@@ -267,7 +269,7 @@ def trailing_EPS(earnings):
         counter += 1
     return trailing
 
-
+#Finds the stockprice for a given date
 def stockprice_monthly(date, monthly_data):
     data = monthly_data
     for d in data:
@@ -275,7 +277,7 @@ def stockprice_monthly(date, monthly_data):
             return float(data[d]['5. adjusted close'])
     return 0
 
-
+#Finds the historical P/E ratio
 def historical_pe(earnings, monthly_data):
     pe_ratios = []
     data = monthly_data
@@ -299,26 +301,31 @@ def historical_pe(earnings, monthly_data):
     return average_pe
 
 
- 
+#Returns the ratio between the eps growth and equity growth averages
 def growth_ratio(balance_sheet, earnings):
     return EPS_growth_average(earnings)/equity_growth_average(balance_sheet)
 
+#Sets default P/E ratio to 2*equity growth average
 def default_pe(balance_sheet):
     return equity_growth_average(balance_sheet)*2*100
 
+#Chooses the lowest P/E ratio between the historical and default P/E
 def choose_pe(balance_sheet, earnings, monthly_data):
     if historical_pe(earnings, monthly_data) < default_pe(balance_sheet) or default_pe(balance_sheet) < 0:
         return historical_pe(earnings, monthly_data)
     return default_pe(balance_sheet)
 
+#Returns the intrinsic value of the stock
 def intrinsic_value(balance_sheet, earnings, monthly_data):
     future_eps = trailing_EPS(earnings)*(1+equity_growth_average(balance_sheet))**10
     pe = choose_pe(balance_sheet, earnings, monthly_data)
     return round(future_eps*pe/4, 3)
 
+#Returns the margin of safety on the stock
 def MOS(balance_sheet, earnings, monthly_data):
     return round(intrinsic_value(balance_sheet, earnings, monthly_data)/2, 3)
 
+#Returns the ratio between free cash flow to long term debt 
 def cf_to_debt(balance_sheet, cash_flow):
     debt = float(balance_sheet[0]['longTermDebtNoncurrent'])
     fcf = float(cash_flow[0]['operatingCashflow']) - float(cash_flow[0]['capitalExpenditures'])
