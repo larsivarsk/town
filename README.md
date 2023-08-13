@@ -9,6 +9,7 @@ does not work as a stock picking program.
 - Finds and returns pricing of a company and the margin of safety based on the approach in "Rule #1".
 - Also deliver other metrics involving debt, earnings, assets, equity and so on - an overview.
 - Graphs MACD, stochastic oscillator and moving average over the last 100 days.
+- The interface is based on the terminal and pyplot.
 
 ### Weaknesses:
 - Pricing requires the key growth rates to be stable and the annual yield to be 15%. Volatile companys with varying results are not this strategy's main target, and consequently, innacurate when assesing such companies. 
