@@ -9,7 +9,7 @@ def earnings(ticker, api_key):
     earnings_data = request_earnings.json()
     return earnings_data
 
-# print(earnings('AAPL', '67GDJTT1ZZGTTTN4'))
+print(earnings('EQNR', '67GDJTT1ZZGTTTN4'))
 
 def balance_sheet(ticker, api_key):
     balance_sheet = f'https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol={ticker}&apikey={api_key}'
