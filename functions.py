@@ -273,7 +273,7 @@ def trailing_EPS(earnings):
 def stockprice_monthly(date, monthly_data):
     data = monthly_data
     for d in data:
-        if d[0:7] == date[0:7]:
+        if d[0:7] == date[0:7] and data[d]['5. adjusted close'] != 'None':
             return float(data[d]['5. adjusted close'])
     return 0
 
@@ -327,8 +327,8 @@ def MOS(balance_sheet, earnings, monthly_data):
 
 #Returns the ratio between free cash flow to long term debt 
 def cf_to_debt(balance_sheet, cash_flow):
-    debt = float(balance_sheet[0]['longTermDebtNoncurrent'])
-    fcf = float(cash_flow[0]['operatingCashflow']) - float(cash_flow[0]['capitalExpenditures'])
+    debt = balance_sheet[0]['longTermDebtNoncurrent']
+    fcf = cash_flow[0]['operatingCashflow'] - cash_flow[0]['capitalExpenditures']
     if debt != 'None' and fcf != 'None':
-        return round(fcf/debt, 3)
+        return round(float(fcf)/float(debt), 3)
     return 0

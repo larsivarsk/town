@@ -9,7 +9,7 @@ import apistckr as a
 #Fast EMA - 12 day EMA
 #Slow EMA - 26 day EMA
 #Signal - 9 day EMA of MACD
-def MACDEXT(data):
+def MACD(data):
     
     hist = []
     for d in data:
