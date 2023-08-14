@@ -28,7 +28,7 @@ python -m pip install -U matplotlib
 - Enter the filepath/directory where the program is saved in your terminal.
 - Type the following in your terminal:
 ```
-python -u program.py
+python -u main.py
 ```
 - The program should now be running, and you can type the ticker of the company you want information on in your terminal.
 - CTRL + C shuts the program down, also closing the open window showing the graphs.
