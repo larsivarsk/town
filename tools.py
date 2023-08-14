@@ -1,5 +1,3 @@
-import urls as u
-import apistckr as a
 
 #MACDEXT
 #MACD - the gauge of the water hose (requires Premium)

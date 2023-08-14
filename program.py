@@ -1,13 +1,9 @@
 import functions as f
 import tools as t
 import urls as u
-import apistckr as a
 import matplotlib.pyplot as plt
 import time as time
 
-ticker = a.ticker
-api_key = a.api_key
-stock_dict = {}
 
 #Gets all the urls so that the program can run in one go
 #However, it takes at least 60 seconds because the program is limited to 5 API calls per minute
@@ -18,9 +14,11 @@ def get_urls(ticker, api_key):
     cash_flow = u.cash_flow(ticker, api_key)['annualReports']
     overview_data = u.overview(ticker, api_key)
     
-    print('Please wait while the program fetches the data.')
-    print('Description:')
+    print('')
+    print('DESCRIPTION:')
     print(overview_data['Description'])
+    print('')
+    print('PLEASE WAIT WHILE THE PROGRAM LOADS THE DATA...(APPROX. 60 SECONDS)')
     print('')
     time.sleep(60)
     
@@ -32,8 +30,10 @@ def get_urls(ticker, api_key):
     
     return earnings, balance_sheet, income_statement, cash_flow, monthly_adjusted, macd_data, stoch_data, ma_data, daily_data, overview_data
     
-    
-    
+#==============================================================================
+
+ 
+#Runs functions from functions.py to find all the key growth rates and pricing numbers    
 def run_functions(earnings, balance_sheet, income_statement, cash_flow, monthly_adjusted, daily_data):
     
     #Lists of data
@@ -62,39 +62,37 @@ def run_functions(earnings, balance_sheet, income_statement, cash_flow, monthly_
                    'EPS Growth/Equity Growth': growth_ratio
                    }  
     
-    print('Growth data, long term debt, intrinsic value, margin of safety. ')
-    print('')
+    print('GROWTH RATES, PRICING AND CASH FLOW/DEBT:')
     for key, value in ticker_dict.items():
         print(f'{key}: {value}')
     print('')
+    
+#==============================================================================
 
 
-
+#Runs tools from tools.py to find the MACD, STOCH, and Moving Average and plots them
 def run_tools(macd_data, stoch_data, ma_data, daily_data):
     hist = t.MACD(macd_data)
     slowk, slowd = t.STOCH(stoch_data)
-    ma, da, today_close = t.moving_average(ma_data, daily_data)
+    ma, da, last_close = t.moving_average(ma_data, daily_data)
 
-    
     #100 days of data
-    x_data= []
-    for i in range(0, 100):
-        x_data.append(i)        
+    x_data = list(range(100))
 
-
-    #Figure and three subplots (1 row, 3 columns)
     fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-    
-    #==============================================================================
-    
-    ax1.bar(x_data, hist, label='MACD', color='green')
+
+    #------------------------------------------------------------------------------------
+        
+    bar_colors = ['green' if val >= 0 else 'red' for val in hist]
+    ax1.bar(x_data, hist, color=bar_colors, label='MACD')
     ax1.set_ylabel('Value')
     ax1.set_title('MACD HISTOGRAM')
+    ax1.grid(True)
     ax1.legend()
 
-    #==============================================================================
+    #------------------------------------------------------------------------------------
     
-    ax2.plot(x_data, slowk, label='slowK', color='blue')
+    ax2.plot(x_data, slowk, label='slowK', color='black')
     ax2.plot(x_data, slowd, label='slowD', color='red')
 
     buy_signals_s = []
@@ -112,15 +110,16 @@ def run_tools(macd_data, stoch_data, ma_data, daily_data):
     ax2.scatter(buy_signals_s, [slowk[i-1] for i in buy_signals_s], marker='^', color='black', label='Buy Signal_s', zorder=5)
     ax2.scatter(sell_signals_s, [slowk[i-1] for i in sell_signals_s], marker='v', color='black', label='Sell Signal_s', zorder=5)
 
-    ax2.set_xlabel(f'Today\'s Close: ${today_close}')
+    ax2.set_xlabel(f'Last Close: ${last_close}')
     ax2.set_ylabel('Value')
     ax2.set_title('STOCH')
+    ax2.grid(True)
     ax2.legend()
 
-    #==============================================================================
+    #------------------------------------------------------------------------------------
     
-    ax3.plot(x_data, ma, label='ma', color='green')
-    ax3.plot(x_data, da, label='da', color='purple')
+    ax3.plot(x_data, ma, label='Moving Average', color='orange')
+    ax3.plot(x_data, da, label='Daily Close', color='purple')
     
     buy_signals_m = []
     sell_signals_m = []
@@ -136,33 +135,34 @@ def run_tools(macd_data, stoch_data, ma_data, daily_data):
     plt.scatter(buy_signals_m, [da[i-1] for i in buy_signals_m], marker='^', color='black', label='Buy Signal_m', zorder=5)
     plt.scatter(sell_signals_m, [da[i-1] for i in sell_signals_m], marker='v', color='black', label='Sell Signal_m', zorder=5)
 
-    
     ax3.set_ylabel('Value')
     ax3.set_title('MOVING AVERAGE')
+    ax3.grid(True)
     ax3.legend()
     
+    #------------------------------------------------------------------------------------
+    
     plt.tight_layout()
-    plt.grid(True)
     plt.show()
+
+#==============================================================================
+
         
-        
+#Prints the overview data provided by the API
 def run_overview(overview_data):
-     
-     for key, value in overview_data.items():
-         if key != 'Description' and key != 'AssetType' and key != 'CIK' and key != 'Address' and key != 'PEGRatio' and key != 'DividendDate' and key != 'ExDividendDate':
+    print('OVERVIEW DATA:')
+    for key, value in overview_data.items():
+        if key != 'Description' and key != 'AssetType' and key != 'CIK' and key != 'Address' and key != 'PEGRatio' and key != 'DividendDate' and key != 'ExDividendDate':
             print(f'{key}: {value}')
     
-    
-    
-def program(ticker, api_key):
-    
+#==============================================================================
+
+
+#Runs the program as a whole
+def run_program(ticker, api_key):
     urls = get_urls(ticker, api_key)
     run_functions(urls[0], urls[1], urls[2], urls[3], urls[4], urls[8])
     run_overview(urls[9])
     run_tools(urls[5], urls[6], urls[7], urls[8])
     
-    
-    
-program(ticker, api_key)
-    
-    
+        
