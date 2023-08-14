@@ -1,8 +1,4 @@
 
-import requests
-import urls as u
-
-
 #ROIC DATA
 #----------------------------------------------
 
@@ -328,7 +324,8 @@ def MOS(balance_sheet, earnings, monthly_data):
 #Returns the ratio between free cash flow to long term debt 
 def cf_to_debt(balance_sheet, cash_flow):
     debt = balance_sheet[0]['longTermDebtNoncurrent']
-    fcf = cash_flow[0]['operatingCashflow'] - cash_flow[0]['capitalExpenditures']
-    if debt != 'None' and fcf != 'None':
-        return round(float(fcf)/float(debt), 3)
+    cf = cash_flow[0]['operatingCashflow'] 
+    ce = cash_flow[0]['capitalExpenditures']
+    if debt != 'None' and cf != 'None':
+        return round((float(cf)-float(ce))/float(debt), 3)
     return 0
