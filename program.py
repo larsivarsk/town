@@ -82,7 +82,7 @@ def run_functions(earnings, balance_sheet, income_statement, cash_flow, monthly_
 
 #Runs tools from tools.py to find the MACD, STOCH, and Moving Average and plots them
 def run_tools(macd_data, stoch_data, ma_data, daily_data):
-    hist = t.MACD(macd_data)
+    hist, macd, signal = t.MACD(macd_data)
     slowk, slowd = t.STOCH(stoch_data)
     ma, da, last_close = t.moving_average(ma_data, daily_data)
 
@@ -93,17 +93,19 @@ def run_tools(macd_data, stoch_data, ma_data, daily_data):
 
     #------------------------------------------------------------------------------------
         
-    bar_colors = ['green' if val >= 0 else 'red' for val in hist]
-    ax1.bar(x_data, hist, color=bar_colors, label='MACD')
+    bar_colors = ['mediumspringgreen' if val >= 0 else 'lightcoral' for val in hist]
+    ax1.bar(x_data, hist, color=bar_colors)
+    ax1.plot(x_data, macd, label='MACD', color='black')
+    ax1.plot(x_data, signal, label='Signal', color='lightslategray')
     ax1.set_ylabel('Value')
-    ax1.set_title('MACD HISTOGRAM')
+    ax1.set_title('MACD')
     ax1.grid(True)
     ax1.legend()
 
     #------------------------------------------------------------------------------------
     
-    ax2.plot(x_data, slowk, label='slowK', color='black')
-    ax2.plot(x_data, slowd, label='slowD', color='red')
+    ax2.plot(x_data, slowk, label='slowK', color='darkslategray')
+    ax2.plot(x_data, slowd, label='slowD', color='darkorange')
 
     buy_signals_s = []
     sell_signals_s = []
@@ -128,8 +130,8 @@ def run_tools(macd_data, stoch_data, ma_data, daily_data):
 
     #------------------------------------------------------------------------------------
     
-    ax3.plot(x_data, ma, label='Moving Average', color='orange')
-    ax3.plot(x_data, da, label='Daily Close', color='purple')
+    ax3.plot(x_data, ma, label='Moving Average', color='navy')
+    ax3.plot(x_data, da, label='Daily Close', color='cornflowerblue')
     
     buy_signals_m = []
     sell_signals_m = []

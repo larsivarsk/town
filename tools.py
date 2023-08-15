@@ -10,14 +10,23 @@
 def MACD(data):
     
     hist = []
+    macd = []
+    signal = []
+    
     for d in data:
         hist.append(float(data[d]['MACD_Hist']))
+        macd.append(float(data[d]['MACD']))
+        signal.append(float(data[d]['MACD_Signal']))
     
     #FROM OLDEST TO NEWEST, last 100 records
     hist = hist[:100]
     hist.reverse()
+    macd = macd[:100]
+    macd.reverse()
+    signal = signal[:100]
+    signal.reverse()
     
-    return hist
+    return hist, macd, signal
 
 #==============================================================================
 
