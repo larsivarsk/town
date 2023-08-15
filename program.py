@@ -50,6 +50,16 @@ def run_functions(earnings, balance_sheet, income_statement, cash_flow, monthly_
     mos = f.MOS(balance_sheet, earnings, monthly_adjusted)
     price = next(iter(daily_data.values()))['4. close']
     
+    if intrinsic_value == 0:
+        print('')
+        print("ERROR: Historical P/E could not be calculated, necessary numbers not available.")
+        print('')
+    
+    if mos == 0:
+        print('')
+        print("ERROR: Cannot calculate margin of safety. Intrinsic value is 0")
+        print('')
+    
     ticker_dict = {'Today\'s closing price': price,
                    'Return on Invested Capital': roic, 
                    'Equity Growth': equity_growth, 
