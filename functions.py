@@ -281,21 +281,24 @@ def historical_pe(earnings, monthly_data):
     counter = 0
     end_year = int(list(data)[0][0:4]) - 10
     
-    while int(earnings[counter]['reportedDate'][0:4]) >= end_year:
-        
-        date = earnings[counter]['reportedDate']
-        stock_price = stockprice_monthly(date, data)
-        
-        # Calculate TTM EPS by summing EPS for the previous four quarters
-        ttm_eps = sum(float(entry['reportedEPS']) if entry['reportedEPS'] != 'None' else 0 for entry in earnings[counter:counter+4])
-        ttm_pe_ratio = stock_price / ttm_eps
-        pe_ratios.append(ttm_pe_ratio)
-        counter += 1
+    try:
+        while int(earnings[counter]['reportedDate'][0:4]) >= end_year:
+            
+            date = earnings[counter]['reportedDate']
+            stock_price = stockprice_monthly(date, data)
+            
+            # Calculate TTM EPS by summing EPS for the previous four quarters
+            ttm_eps = sum(float(entry['reportedEPS']) if entry['reportedEPS'] != 'None' else 0 for entry in earnings[counter:counter+4])
+            ttm_pe_ratio = stock_price / ttm_eps
+            pe_ratios.append(ttm_pe_ratio)
+            counter += 1
 
-    average_pe = round(sum(pe_ratios)/len(pe_ratios), 3)
+        average_pe = round(sum(pe_ratios)/len(pe_ratios), 3)
+        
+        return average_pe
     
-    return average_pe
-
+    except:
+        return 0
 
 #Returns the ratio between the eps growth and equity growth averages
 def growth_ratio(balance_sheet, earnings):
@@ -307,9 +310,13 @@ def default_pe(balance_sheet):
 
 #Chooses the lowest P/E ratio between the historical and default P/E
 def choose_pe(balance_sheet, earnings, monthly_data):
-    if historical_pe(earnings, monthly_data) < default_pe(balance_sheet) or default_pe(balance_sheet) < 0:
-        return historical_pe(earnings, monthly_data)
-    return default_pe(balance_sheet)
+    historical = historical_pe(earnings, monthly_data)
+    default = default_pe(balance_sheet)
+    
+    if historical < default or default < 0:
+        return historical
+    
+    return default
 
 #Returns the intrinsic value of the stock
 def intrinsic_value(balance_sheet, earnings, monthly_data):
@@ -319,13 +326,16 @@ def intrinsic_value(balance_sheet, earnings, monthly_data):
 
 #Returns the margin of safety on the stock
 def MOS(balance_sheet, earnings, monthly_data):
-    return round(intrinsic_value(balance_sheet, earnings, monthly_data)/2, 3)
+    intrinsic = intrinsic_value(balance_sheet, earnings, monthly_data)        
+    return round(intrinsic/2, 3)
 
 #Returns the ratio between free cash flow to long term debt 
 def cf_to_debt(balance_sheet, cash_flow):
-    debt = balance_sheet[0]['longTermDebtNoncurrent']
-    cf = cash_flow[0]['operatingCashflow'] 
-    ce = cash_flow[0]['capitalExpenditures']
-    if debt != 'None' and cf != 'None':
-        return round((float(cf)-float(ce))/float(debt), 3)
-    return 0
+    try:
+        debt = balance_sheet[0]['longTermDebtNoncurrent']
+        cf = cash_flow[0]['operatingCashflow'] 
+        ce = cash_flow[0]['capitalExpenditures']
+        if debt != 'None' and cf != 'None':
+            return round((float(cf)-float(ce))/float(debt), 3)
+    except:
+        return 0
